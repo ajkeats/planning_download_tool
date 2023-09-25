@@ -25,9 +25,9 @@ def set_page_config():
     if "download_progress" not in st.session_state:
         st.session_state.download_progress = 0
 
-def start_download(links_with_text):
+def start_download(links_with_text, url):
     st.session_state.show_table = False
-    download_files(links_with_text)
+    download_files(links_with_text, url)
     st.session_state.download_complete = True
 
 #-------------------------------------------------#
@@ -44,9 +44,12 @@ if url and st.session_state.download_complete == False:
     if st.session_state.df is None:
         st.write("No table found...")
     else:     
-        st.button("Start Download", key="scrape", on_click=start_download,args=[st.session_state.links_with_text])
+        st.button("Start Download", key="scrape", on_click=start_download,args=[st.session_state.links_with_text, url])
         with st.expander("Show table", expanded=st.session_state.show_table):
             st.write(st.session_state.df)
+        with st.expander("Show links", expanded=st.session_state.show_table):
+            for link in st.session_state.links_with_text:
+                st.write(link)
     
 
 if st.session_state.download_complete:

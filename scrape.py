@@ -68,7 +68,7 @@ def is_absolute_url(url):
     """
     return bool(urlparse(url).netloc)
 
-def download_files_from_links(links_with_text, save_directory):
+def download_files_from_links(links_with_text, save_directory, base_url):
     # Ensure the save directory exists
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
@@ -84,14 +84,23 @@ def download_files_from_links(links_with_text, save_directory):
 
     num_links = len(links_with_text)
 
+    cookies = requests.get(base_url).cookies
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+        }
+
+
     for link, row_text in links_with_text:
         try:
-            response = requests.get(link, stream=True)
+
+            response = requests.get(link, headers=headers, cookies=cookies, stream=True)
             content_type = response.headers.get('Content-Type')
+            print(f"Downloading: {link} ({content_type})")
 
             # Check if content type matches any of our desired file types
             for extension, mime in file_types.items():
                 if content_type == mime:
+                    print(f"Matched MIME type: {mime} for {link}")
                     sanitized_name = sanitize_filename(row_text)
                     file_name = os.path.join(save_directory, sanitized_name + '.' + extension)
                     with open(file_name, 'wb') as f:
@@ -143,10 +152,10 @@ def get_tables(url):
     return df, links_with_text
 
 
-def download_files(links_with_text):
+def download_files(links_with_text, base_url):
     
     SAVE_DIRECTORY = './downloaded_files'
     
     delete_downloads_and_zip()
-    download_files_from_links(links_with_text, SAVE_DIRECTORY)
+    download_files_from_links(links_with_text, SAVE_DIRECTORY, base_url)
     zip_directory(SAVE_DIRECTORY, SAVE_DIRECTORY + '.zip')
