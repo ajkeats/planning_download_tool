@@ -11,4 +11,4 @@ ENV PORT=
 COPY . /app
 WORKDIR /app
 
-CMD streamlit run home.py --server.port=${PORT} --browser.serverAddress="0.0.0.0"
+CMD streamlit run app.py --server.port=${PORT} --browser.serverAddress="0.0.0.0"
