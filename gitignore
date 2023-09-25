@@ -1,4 +1,5 @@
-__pycache__/*
-downloaded_files/*
+__pycache__/
+downloaded_files/
 downloaded_files.zip
 test.ipynb
+.DS_Store
