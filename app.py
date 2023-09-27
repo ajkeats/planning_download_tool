@@ -37,7 +37,7 @@ def start_download(links_with_text, url):
 set_page_config()
 
 st.title("Download Planning Files")
-ip = requests.get('https://curlmyip.org/').contents
+ip = requests.get('https://curlmyip.org/').text
 st.write(ip)
 
 url = st.text_input("URL", key="url")
