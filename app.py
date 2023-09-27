@@ -1,5 +1,6 @@
 import streamlit as st
 from scrape import get_tables, download_files
+import requests
 
 def set_page_config():
     """
@@ -36,6 +37,8 @@ def start_download(links_with_text, url):
 set_page_config()
 
 st.title("Download Planning Files")
+ip = requests.get('https://curlmyip.org/').contents
+st.write(ip)
 
 url = st.text_input("URL", key="url")
 
